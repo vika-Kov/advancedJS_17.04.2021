@@ -1,18 +1,29 @@
 Vue.component("products", {
     data() {
       return {
+        products: [],
+        filtered: [],
+        catalogUrl: "/catalogData.json",
         imgCatalog: "https://place-hold.it/200x150",
       };
     },
-    props: ["filtered"],
-    methods: {},
+
+    methods: { 
+     filter(userSearch) {
+      // console.log("filter:" + userSearch);
+      let regexp = new RegExp(userSearch, "i");
+      this.filtered = this.products.filter((el) =>
+        regexp.test(el.product_name)
+      );
+    },
+    },
     mounted() {
-      // this.$parent.getJson(`${API + this.catalogUrl}`).then((data) => {
-      //   for (let el of data) {
-      //     this.products.push(el);
-      //     this.filtered.push(el);
-      //   }
-      // });
+      this.$parent.getJson(`${API + this.catalogUrl}`).then((data) => {
+        for (let el of data) {
+          this.products.push(el);
+          this.filtered.push(el);
+        }
+      });
     },
     template: `
           <div class="products">
